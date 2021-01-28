@@ -9,5 +9,10 @@ public class obstacleScript : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector2.left * speed * Time.deltaTime);
+
+        if (transform.position.x < -14)
+        {
+            Destroy(gameObject);
+        }
     }
 }
