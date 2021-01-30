@@ -42,4 +42,12 @@ public class playerScript : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(feetPos.position, radius);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Obstacle"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
