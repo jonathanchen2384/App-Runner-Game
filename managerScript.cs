@@ -19,4 +19,9 @@ public class managerScript : MonoBehaviour
     {
         SceneManager.GetActiveScene();
     }
+
+    public void goBack()
+    {
+        SceneManager.LoadScene("Menu");
+    }
 }
