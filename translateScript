@@ -1,0 +1,20 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class translateScript : MonoBehaviour
+{
+    public float endPoint;
+    public float startPoint;
+    public float speed;
+
+    void Update()
+    {
+        if (transform.position.x <= endPoint)
+        {
+            transform.position = new Vector2(startPoint, transform.position.y);
+        }
+
+        transform.Translate(Vector2.left * speed * Time.deltaTime);
+    }
+}
