@@ -7,6 +7,8 @@ public class controlScript : MonoBehaviour
 {
     public float adjuster;
     private float timeSave;
+    public GameObject overScene;
+    GameObject Obj;
 
     void Update()
     {
@@ -20,12 +22,16 @@ public class controlScript : MonoBehaviour
     {
         if (Time.timeScale != 0)
         {
+            Obj = (GameObject)Instantiate(overScene, transform.position, Quaternion.identity);
             timeSave = Time.timeScale;
             Time.timeScale = 0;
+            AudioListener.pause = true;
         }
 
         else {
+            Destroy(Obj);
             Time.timeScale = timeSave;
+            AudioListener.pause = false;
         }
     }
 }
