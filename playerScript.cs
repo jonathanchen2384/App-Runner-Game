@@ -15,6 +15,9 @@ public class playerScript : MonoBehaviour
     public int totalJumps;
     private int extrajumps;
 
+    public GameObject overScene;
+    public GameObject pauseObj;
+
     void Start()
     {
         extrajumps = totalJumps;
@@ -25,12 +28,13 @@ public class playerScript : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(feetPos.position, radius, ground);
 
         if ( isGrounded == true && Input.GetMouseButtonDown(0)) {
-            extrajumps = totalJumps;
-            RB.velocity = Vector2.up * jumpForce;
+                extrajumps = totalJumps;
+                RB.velocity = Vector2.up * jumpForce;
         }
 
         if (isGrounded == false && extrajumps > 0) {
-            if (Input.GetMouseButtonDown(0)) {
+            if (Input.GetMouseButtonDown(0))
+            {
                 RB.velocity = Vector2.up * jumpForce;
                 extrajumps--;
             }
@@ -47,6 +51,8 @@ public class playerScript : MonoBehaviour
     {
         if (collision.CompareTag("Obstacle"))
         {
+            Destroy(pauseObj);
+            Instantiate(overScene, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
