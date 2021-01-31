@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class controlScript : MonoBehaviour
 {
+    public float maxSpeed;
     public float adjuster;
     private float timeSave;
     public GameObject overScene;
@@ -12,7 +13,7 @@ public class controlScript : MonoBehaviour
 
     void Update()
     {
-        if (Time.timeScale <= 2.5 && Time.timeScale > 0)
+        if (Time.timeScale <= maxSpeed && Time.timeScale > 0)
         {
             Time.timeScale += Time.deltaTime*adjuster;
         }
