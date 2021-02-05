@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class playerScript : MonoBehaviour
 {
+
+    public GameObject[] player;
+
     public Rigidbody2D RB;
     public float jumpForce;
 
@@ -29,7 +32,7 @@ public class playerScript : MonoBehaviour
     private Vector2 mousePos;
 
     bool isClick;
-    public Transform checkerPos;
+    public Transform[] checkerPos;
 
     //steps
     public float startTime;
@@ -42,25 +45,63 @@ public class playerScript : MonoBehaviour
     // jump Sound
     public GameObject jumpSound;
 
+    public int playerID;
+
+
+    public Animator Anim;
+
+
+
+    public void Awake()
+    {
+        numHearts = PlayerPrefs.GetInt("Hearts", 3);
+        health = numHearts;
+
+        playerID = PlayerPrefs.GetInt("Power", 1);
+    }
+
     void Start()
     {
+        Anim.SetBool("isJumping", false);
+
+
+        for (int i = 0; i < player.Length; i++)
+        {
+            player[i].SetActive(false);
+        }
+
         extrajumps = totalJumps;
         isClick = true;
 
         duration = startTime;
-        durationTwo = startTime*1.5f;
+        durationTwo = startTime * 1.5f;
     }
 
     private void FixedUpdate()
     {
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        if (mousePos.x >= checkerPos.position.x && mousePos.y >= checkerPos.position.y)
+        //pause position
+
+        if (mousePos.x >= checkerPos[0].position.x && mousePos.y >= checkerPos[0].position.y)
         {
             isClick = false;
         }
 
-        else {
+        //atack position
+
+        if (mousePos.x >= checkerPos[1].position.x && mousePos.y >= checkerPos[1].position.y)
+        {
+            if (mousePos.x <= checkerPos[2].position.x && mousePos.y <= checkerPos[2].position.y)
+            {
+                isClick = false;
+            }
+        }
+
+        //everywhere else
+
+        else
+        {
             isClick = true;
         }
 
@@ -68,28 +109,35 @@ public class playerScript : MonoBehaviour
         if (isGrounded == true)
         {
             RunSound();
+            Anim.SetBool("isJumping", false);
         }
     }
 
     void Update()
     {
+        identifyPlayer();
+
         isGrounded = Physics2D.OverlapCircle(feetPos.position, radius, ground);
 
-        if ( isGrounded == true && Input.GetMouseButtonDown(0)) {
+        if (isGrounded == true && Input.GetMouseButtonDown(0))
+        { // jump
             if (isClick == true)
             {
                 Instantiate(jumpSound, transform.position, Quaternion.identity);
                 extrajumps = totalJumps;
                 RB.velocity = Vector2.up * jumpForce;
+                Anim.SetBool("isJumping", true);
             }
         }
 
-        if (isGrounded == false && extrajumps > 0) {
-            if (Input.GetMouseButtonDown(0)&& isClick == true)
+        if (isGrounded == false && extrajumps > 0)
+        {
+            if (Input.GetMouseButtonDown(0) && isClick == true)
             {
                 Instantiate(jumpSound, transform.position, Quaternion.identity);
                 RB.velocity = Vector2.up * jumpForce;
                 extrajumps--;
+                Anim.SetBool("isJumping", true);
             }
         }
 
@@ -99,7 +147,7 @@ public class playerScript : MonoBehaviour
         {
             Destroy(pauseObj);
             Instantiate(overScene, transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
 
         powerUpChecker();
@@ -127,14 +175,15 @@ public class playerScript : MonoBehaviour
             health = numHearts;
         }
 
-        for (int i = 0; i < hearts.Length ; i++ )
+        for (int i = 0; i < hearts.Length; i++)
         {
             if (i < health)
             {
                 hearts[i].sprite = fullHeart;
             }
 
-            else {
+            else
+            {
                 hearts[i].sprite = emptyHeart;
             }
 
@@ -143,7 +192,8 @@ public class playerScript : MonoBehaviour
                 hearts[i].enabled = true;
             }
 
-            else {
+            else
+            {
                 hearts[i].enabled = false;
             }
         }
@@ -158,7 +208,6 @@ public class playerScript : MonoBehaviour
             GetComponent<collectionScript>().powered = false;
         }
     }
-
 
 
     public void RunSound()
@@ -177,6 +226,29 @@ public class playerScript : MonoBehaviour
         {
             Instantiate(stepTwo, transform.position, Quaternion.identity);
             durationTwo = startTime;
+        }
+    }
+
+    public void identifyPlayer()
+    {
+        if (playerID == 1)
+        {
+            player[0].SetActive(true);
+        }
+
+        else if (playerID == 2)
+        {
+            player[1].SetActive(true);
+        }
+
+        else if (playerID == 3)
+        {
+            player[2].SetActive(true);
+        }
+
+        else
+        {
+            player[0].SetActive(true);
         }
     }
 }
