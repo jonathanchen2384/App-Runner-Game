@@ -22,22 +22,4 @@ public class collectionScript : MonoBehaviour
         coinText.text = coins.ToString();
         gemText.text = gems.ToString();
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Coin"))
-        {
-            coins++;
-        }
-
-        if (collision.CompareTag("Gem"))
-        {
-            gems++;
-        }
-
-        if (collision.CompareTag("Power"))
-        {
-            powered = true;
-        }
-    }
 }
